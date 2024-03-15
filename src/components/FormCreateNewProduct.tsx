@@ -16,8 +16,12 @@ type ErrorType = {
     price?:string
 }
 
+type CreateProductFormProps = {
+  getDataForm: (product: AddProduct) => void;
+}
 
-export const FormCreateNewProduct = () => {
+
+const FormCreateNewProduct: React.FC<CreateProductFormProps> = ({getDataForm}) => {
     const [product, setProduct] = useState<AddProduct>({
         title: '',
         price: 0,
@@ -25,6 +29,11 @@ export const FormCreateNewProduct = () => {
         image:'https://i.pravatar.cc',
         category: 'electronic'
     })
+
+    useEffect(() => {
+      getDataForm(product)
+    
+    }, [product, getDataForm])
     const [error, setError] = useState<ErrorType>({})
     useEffect(() => {
         const newError:ErrorType = {};
@@ -51,23 +60,25 @@ export const FormCreateNewProduct = () => {
         <div className="mb-2 block">
           <Label htmlFor="title" value="Product Title" />
         </div>
-        <TextInput id="title" type="text" placeholder="Product Name" value={product.title} required />
+        <TextInput id="title" type="text" placeholder="Product Name" value={product.title} onChange={handleChange} required />
         {error.title && <p className="text-red-600 text-xs" >{error.title}</p>}
       </div>
       <div>
         <div className="mb-2 block">
           <Label htmlFor="price" value="Price" />
         </div>
-        <TextInput id="price" type="number" placeholder="Price" required />
+        <TextInput id="price" type="number" placeholder="Price" value={product.price} onChange={handleChange} required />
         {error.price && <p className="text-red-600 text-xs" >{error.price}</p>}
       </div>
       <div>
         <div className="mb-2 block">
           <Label htmlFor="description" value="Product Description" />
         </div>
-        <Textarea id="description"  placeholder="Description Here..." />
+        <Textarea id="description"  placeholder="Description Here..." value={product.description} onChange={handleChange} />
       </div>
      
     </form>
   )
 }
+
+export default FormCreateNewProduct
